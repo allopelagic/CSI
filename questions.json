@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "quizzes": [
+    {
+      "quiz_id": "network-basics",
+      "title": "Networking Fundamentals",
+      "description": "Transport, addressing, routing and application basics.",
+      "questions": [
+        {"question_id":"NET001","text":"Which transport protocol provides reliable byte-stream delivery?","options":{"A":"UDP","B":"TCP","C":"ARP","D":"ICMP"},"answer":"B","time_limit":15,"points":100},
+        {"question_id":"NET002","text":"Which device forwards packets between IP networks?","options":{"A":"Router","B":"Hub","C":"Repeater","D":"Patch panel"},"answer":"A","time_limit":10,"points":150},
+        {"question_id":"NET003","text":"Which protocol maps a domain name to an IP address?","options":{"A":"DHCP","B":"HTTP","C":"DNS","D":"FTP"},"answer":"C","time_limit":20,"points":200},
+        {"question_id":"NET004","text":"How many bits are in an IPv4 address?","options":{"A":"16","B":"32","C":"64","D":"128"},"answer":"B","time_limit":10,"points":100},
+        {"question_id":"NET005","text":"Which layer provides end-to-end process communication?","options":{"A":"Physical","B":"Data link","C":"Network","D":"Transport"},"answer":"D","time_limit":15,"points":250}
+      ]
+    },
+    {
+      "quiz_id": "tcp-and-security",
+      "title": "TCP and Network Reliability",
+      "description": "Framing, flow control, clocks and confidentiality.",
+      "questions": [
+        {"question_id":"TCP001","text":"What does one TCP recv call return?","options":{"A":"Exactly one JSON object","B":"Exactly one packet","C":"A portion of the available byte stream","D":"All future messages"},"answer":"C","time_limit":12,"points":200},
+        {"question_id":"TCP002","text":"Which clock should measure an elapsed answer deadline?","options":{"A":"Monotonic clock","B":"Local wall clock","C":"Client clock","D":"Calendar date"},"answer":"A","time_limit":15,"points":150},
+        {"question_id":"TCP003","text":"When may the correct answer be disclosed?","options":{"A":"In the public catalogue","B":"When the question closes","C":"In an answer acknowledgement","D":"Before the quiz starts"},"answer":"B","time_limit":10,"points":100},
+        {"question_id":"TCP004","text":"What should a sender do after a partial TCP send?","options":{"A":"Resend the entire message","B":"Discard the unsent suffix","C":"Change the message ID","D":"Continue with the unsent suffix"},"answer":"D","time_limit":20,"points":250},
+        {"question_id":"TCP005","text":"Why should each connection have a bounded output queue?","options":{"A":"To guarantee encryption","B":"To eliminate TCP framing","C":"To limit memory used by slow readers","D":"To replace authentication"},"answer":"C","time_limit":10,"points":100}
+      ]
+    }
+  ]
+}

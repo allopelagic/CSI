@@ -131,6 +131,8 @@ class Client:
             self.last_send = self.clock()
         self.tx.append(memoryview(data))
         self.tx_bytes += len(data)
+        if self.next_request > p.MAX_SEQUENCE:
+            self.quitting_at = self.clock() + p.FLUSH_TIMEOUT
         return True
 
     def _quit(self):
@@ -190,13 +192,17 @@ class Client:
             return
         for _ in range(p.FRAME_BUDGET):
             if self.barrier is not None or len(self.pending) >= p.MAX_PENDING:
-                if self.input.take_quit():
+                stalled = any(self.clock() - item.created >= p.PENDING_TIMEOUT for item in self.pending.values())
+                if (stalled or len(self.pending) >= p.MAX_PENDING) and self.input.take_quit():
+                    self._quit()
+                elif stalled and self.input.eof.is_set() and self.input.lines.empty():
                     self._quit()
                 break
             try:
                 line = self.input.lines.get_nowait()
             except queue.Empty:
-                if self.input.eof.is_set() and not self.pending:
+                if self.input.eof.is_set() and (not self.pending or all(
+                        self.clock() - item.created >= p.PENDING_TIMEOUT for item in self.pending.values())):
                     self._quit()
                 break
             self.command(line)
@@ -211,6 +217,8 @@ class Client:
             event_number = p.sequence(message["event_id"], "evt")
             p.require(event_number == self.last_event + 1, "Event number did not increase by one.")
             self.last_event = event_number
+            if event_number == p.MAX_SEQUENCE:
+                self.quitting_at = self.clock() + p.FLUSH_TIMEOUT
             if kind == "PLAYER_STATUS_EVENT":
                 p.require(any(x["user_id"] == self.user_id for x in payload["room"]["players"]))
                 self.room = payload["room"]

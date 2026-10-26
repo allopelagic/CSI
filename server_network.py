@@ -117,6 +117,8 @@ class Server:
             c.tx_bytes += len(data)
             if event:
                 c.last_event += 1
+                if c.last_event == p.MAX_SEQUENCE:
+                    self._mark_close(c, drain=True)
 
     def _drain_cleanup(self):
         while self.cleanup:
